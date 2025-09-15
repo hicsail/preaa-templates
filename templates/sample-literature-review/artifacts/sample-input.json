@@ -1,0 +1,24 @@
+{
+  "query": "artificial intelligence in healthcare",
+  "keywords": [
+    "machine learning",
+    "medical diagnosis",
+    "deep learning",
+    "healthcare AI",
+    "clinical decision support"
+  ],
+  "date_range": {
+    "start": "2022-01-01",
+    "end": "2024-01-01"
+  },
+  "max_papers": 30,
+  "databases": ["pubmed", "arxiv", "ieee"],
+  "analysis_options": {
+    "depth": "detailed",
+    "include_methodology": true,
+    "identify_gaps": true,
+    "track_trends": true
+  },
+  "output_format": "json",
+  "language": "en"
+}

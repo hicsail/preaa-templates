@@ -1,0 +1,91 @@
+# Literature Review Template Configuration
+template:
+  name: "literature-review-automation"
+  version: "1.0.0"
+  description: "Automated literature review using AI-powered analysis"
+  author: "PREAA Templates Team"
+
+# Database Configuration
+databases:
+  pubmed:
+    enabled: true
+    api_key: "${PUBMED_API_KEY}"
+    base_url: "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
+    rate_limit: 3  # requests per second
+    
+  arxiv:
+    enabled: true
+    api_key: "${ARXIV_API_KEY}"
+    base_url: "http://export.arxiv.org/api/query"
+    rate_limit: 1  # requests per second
+    
+  ieee:
+    enabled: true
+    api_key: "${IEEE_API_KEY}"
+    base_url: "https://ieeexploreapi.ieee.org/api/v1/search/articles"
+    rate_limit: 2  # requests per second
+
+# Analysis Configuration
+analysis:
+  max_papers: 50
+  min_relevance_score: 0.7
+  analysis_depth: "detailed"  # basic, detailed, comprehensive
+  
+  themes:
+    min_occurrence: 3
+    max_themes: 10
+    
+  gaps:
+    enabled: true
+    min_papers_for_gap: 5
+    
+  methodology:
+    enabled: true
+    track_trends: true
+
+# LLM Configuration
+llm:
+  provider: "openai"  # or anthropic, cohere, etc.
+  model: "gpt-4"
+  temperature: 0.3
+  max_tokens: 4000
+  
+  prompts:
+    analysis: "Analyze the following academic papers and extract key themes, methodologies, and research gaps..."
+    summarization: "Summarize the following research paper focusing on methodology, findings, and implications..."
+    gap_identification: "Identify research gaps and opportunities in the following collection of papers..."
+
+# Output Configuration
+output:
+  format: "json"  # json, markdown, pdf
+  include_abstracts: true
+  include_citations: true
+  include_metrics: true
+  
+  structure:
+    - summary
+    - papers
+    - themes
+    - gaps
+    - methodology_trends
+    - recommendations
+
+# Caching Configuration
+cache:
+  enabled: true
+  duration: 3600  # seconds
+  storage: "redis"
+  
+# Logging Configuration
+logging:
+  level: "info"  # debug, info, warning, error
+  file: "/var/log/literature-review.log"
+  max_size: "10MB"
+  backup_count: 5
+
+# Security Configuration
+security:
+  api_key_rotation: true
+  request_validation: true
+  rate_limiting: true
+  max_requests_per_hour: 1000

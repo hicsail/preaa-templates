@@ -1,0 +1,40 @@
+{
+  "description": "This is a placeholder for the LangFlow template JSON export. In a real template, this would contain the actual LangFlow workflow configuration exported from the LangFlow interface.",
+  "instructions": "To create the actual LangFlow template:",
+  "steps": [
+    "1. Open LangFlow at http://localhost:7860",
+    "2. Create a new workflow with the following components:",
+    "3. Add a 'Text Input' component for the research query",
+    "4. Add 'API Request' components for each database (PubMed, arXiv, IEEE)",
+    "5. Add 'Text Processing' components for data cleaning and formatting",
+    "6. Add 'LLM' components for analysis and summarization",
+    "7. Add 'Text Output' components for structured results",
+    "8. Connect the components in the appropriate sequence",
+    "9. Configure each component with the required settings",
+    "10. Test the workflow with sample data",
+    "11. Export the workflow as JSON and replace this file"
+  ],
+  "workflow_structure": {
+    "input": "Research query and parameters",
+    "processing": [
+      "Database API calls",
+      "Data cleaning and validation",
+      "AI-powered analysis",
+      "Theme identification",
+      "Gap analysis",
+      "Summary generation"
+    ],
+    "output": "Structured literature review data"
+  },
+  "components_needed": [
+    "Text Input",
+    "API Request (PubMed)",
+    "API Request (arXiv)", 
+    "API Request (IEEE)",
+    "Text Processing",
+    "LLM Analysis",
+    "LLM Summarization",
+    "Text Output"
+  ],
+  "note": "This is a template structure. The actual LangFlow JSON export would be much more complex and contain detailed component configurations, connections, and parameters."
+}
