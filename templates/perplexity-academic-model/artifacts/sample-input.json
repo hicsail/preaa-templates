@@ -1,0 +1,15 @@
+{
+  "query": "What are the latest developments in quantum machine learning?",
+  "system_message": "You are a research assistant specializing in quantum computing and machine learning. Provide detailed, accurate information with proper citations from academic sources.",
+  "model_name": "sonar-pro",
+  "search_mode": "academic",
+  "search_domain_filter": "arxiv.org, ieee.org, nature.com, science.org, pubmed.ncbi.nlm.nih.gov",
+  "search_recency_filter": "month",
+  "max_tokens": 2048,
+  "temperature": 0.3,
+  "top_p": 0.9,
+  "return_citations": true,
+  "format_citations_as_links": true,
+  "return_related_questions": true,
+  "return_images": false
+}

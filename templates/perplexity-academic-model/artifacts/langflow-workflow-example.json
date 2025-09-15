@@ -1,0 +1,75 @@
+{
+  "description": "Example LangFlow workflow using the Perplexity Academic Model component",
+  "workflow_name": "Academic Research Assistant",
+  "version": "1.0.0",
+  "components": [
+    {
+      "id": "text_input_1",
+      "type": "TextInput",
+      "data": {
+        "display_name": "Research Query",
+        "value": "What are the latest developments in quantum machine learning?",
+        "multiline": true
+      }
+    },
+    {
+      "id": "perplexity_component_1",
+      "type": "PerplexityDirectModel",
+      "data": {
+        "display_name": "Perplexity Academic Search",
+        "api_key": "${PERPLEXITY_API_KEY}",
+        "model_name": "sonar-pro",
+        "search_mode": "academic",
+        "search_domain_filter": "arxiv.org, ieee.org, nature.com, science.org",
+        "search_recency_filter": "month",
+        "max_tokens": 2048,
+        "temperature": 0.3,
+        "return_citations": true,
+        "format_citations_as_links": true,
+        "return_related_questions": true
+      }
+    },
+    {
+      "id": "text_output_1",
+      "type": "TextOutput",
+      "data": {
+        "display_name": "Research Results"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "source": "text_input_1",
+      "target": "perplexity_component_1",
+      "source_handle": "text",
+      "target_handle": "input_message"
+    },
+    {
+      "source": "perplexity_component_1",
+      "target": "text_output_1",
+      "source_handle": "text_output",
+      "target_handle": "text"
+    }
+  ],
+  "instructions": [
+    "1. Import this workflow into LangFlow",
+    "2. Set your PERPLEXITY_API_KEY environment variable",
+    "3. Modify the research query as needed",
+    "4. Run the workflow to get academic research results with citations",
+    "5. The output will include formatted citations and related questions"
+  ],
+  "use_cases": [
+    "Literature review automation",
+    "Academic fact-checking",
+    "Research paper summarization",
+    "Current research trends analysis",
+    "Academic Q&A systems"
+  ],
+  "configuration_tips": [
+    "Use 'academic' search mode for peer-reviewed sources",
+    "Set domain filters to focus on specific academic databases",
+    "Adjust recency filters based on your research needs",
+    "Enable related questions for follow-up research",
+    "Use lower temperature (0.1-0.3) for more focused academic responses"
+  ]
+}

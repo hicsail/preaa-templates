@@ -1,0 +1,15 @@
+# Perplexity Academic Model Component Requirements
+# Core dependencies
+httpx>=0.24.0
+langflow>=1.0.0
+
+# Optional dependencies for enhanced functionality
+pydantic>=2.0.0
+typing-extensions>=4.0.0
+
+# Development dependencies (optional)
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.0.0
