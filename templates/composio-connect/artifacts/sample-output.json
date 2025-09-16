@@ -1,0 +1,41 @@
+{
+  "successful": true,
+  "data": {
+    "response_data": {
+      "id": "AAMkAGI2...",
+      "subject": "Research Collaboration Meeting - Quantum Computing Project",
+      "body": {
+        "contentType": "Text",
+        "content": "Dear Dr. Smith,\n\nI hope this email finds you well..."
+      },
+      "toRecipients": [
+        {
+          "emailAddress": {
+            "name": "Dr. Smith",
+            "address": "dr.smith@university.edu"
+          }
+        }
+      ],
+      "ccRecipients": [
+        {
+          "emailAddress": {
+            "name": "Research Team",
+            "address": "research.team@university.edu"
+          }
+        }
+      ],
+      "sentDateTime": "2024-01-15T10:30:00Z",
+      "isRead": false,
+      "isDraft": false
+    },
+    "status_code": 200
+  },
+  "metadata": {
+    "action": "OUTLOOK_OUTLOOK_SEND_EMAIL",
+    "execution_time": 1.2,
+    "timestamp": "2024-01-15T10:30:00Z",
+    "service": "microsoft_outlook",
+    "composio_request_id": "req_abc123def456"
+  },
+  "error": null
+}

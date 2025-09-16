@@ -1,0 +1,27 @@
+{
+  "action": "OUTLOOK_OUTLOOK_SEND_EMAIL",
+  "parameters": {
+    "user_id": "me",
+    "subject": "Research Collaboration Meeting - Quantum Computing Project",
+    "body": "Dear Dr. Smith,\n\nI hope this email finds you well. I would like to schedule a meeting to discuss our ongoing quantum computing research project.\n\nKey topics for discussion:\n- Progress on the quantum algorithm implementation\n- Upcoming conference presentation preparation\n- Grant application timeline and requirements\n- Collaboration opportunities with your research group\n\nPlease let me know your availability for next week. I'm flexible with timing and can accommodate your schedule.\n\nBest regards,\nDr. Johnson",
+    "to_email": "dr.smith@university.edu",
+    "to_name": "Dr. Smith",
+    "cc_emails": "research.team@university.edu",
+    "is_html": false,
+    "save_to_sent_items": true
+  },
+  "authentication": {
+    "composio_api_key": "your_composio_api_key_here",
+    "outlook_oauth": {
+      "client_id": "your_outlook_client_id",
+      "client_secret": "your_outlook_client_secret",
+      "tenant_id": "your_tenant_id"
+    }
+  },
+  "workflow_context": {
+    "trigger": "manual",
+    "purpose": "research_collaboration",
+    "priority": "normal",
+    "follow_up_required": true
+  }
+}
