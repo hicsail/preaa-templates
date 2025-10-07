@@ -21,6 +21,17 @@ Natural Language → LLM → Notion Query (JSON) → Notion DB → LLM Summary �
 
 ````
 
+
+## Project Context and Permissions
+
+This flow was originally developed by **Marcus Izumi** as part of **Boston University’s XC475 course**, focused on sprint task management and automation.
+
+It currently references a **duplicated copy** of the official class Notion sprint dashboard database.  
+The workflow and schema were modeled directly after the XC475 workspace’s task tracker to ensure compatibility.
+
+> 📝 **Note:**  
+> To fully integrate with the **official XC475 workspace**, you must be a **workspace owner or admin** to add and authorize Notion API integrations.  
+> As of submission, integration permissions are pending instructor approval.
 ## Use Case
 - **Problem**: Teams spend time filtering/sorting tasks across tools.
 - **Audience**: Students & project teams (e.g., XC475), researchers, admins.
