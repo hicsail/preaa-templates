@@ -1,27 +1,29 @@
 
-# 🧩 Task Summarizer with Notion + Slack
+# 🧩 Notion-to-Slack Task Summarizer (XC475 Sprint Dashboard Automation)
 
 **Category:** Collaboration / Workflow Automation  
 **Complexity:** Intermediate  
-**PREAA Components:** LangFlow, OpenAI API, Notion API, Slack API  
+**PREAA Components:** LangFlow, OpenAI API (or equivalent LLM), Notion API, Slack API  
 **Estimated Setup Time:** ≤10 minutes  
 
 ---
 
 ## 📘 Overview
 
-This LangFlow template automates task reporting by connecting **Notion**, **OpenAI**, and **Slack**.
+This LangFlow template automatically summarizes **project tasks** stored in a Notion database and posts the results to **Slack**.  
 
-Given a **natural-language instruction** (e.g.,  
-> “Summarize high-priority tasks that are due this week”),  
-the flow will:
+It was built for **XC475 (Software Engineering Project)** as an enhancement to the team’s Notion sprint dashboard — allowing natural-language queries like:
 
-1. Use an LLM to generate a **structured Notion JSON query**.  
-2. Query your **Notion Tasks database** using the Notion API.  
-3. Summarize the results with OpenAI (e.g., GPT-4 or GPT-4o).  
-4. Send a formatted Markdown summary message to a **Slack channel**.
+> “Show all high-priority tasks due this week and who’s assigned.”
 
-Ideal for sprint reviews, daily summaries, and project coordination.
+The workflow:
+1. Parses the input instruction (natural language) using an **LLM**  
+2. Generates a **Notion API query (JSON)** matching that request  
+3. Fetches matching tasks from your **Notion Database**  
+4. Summarizes key points (status, priority, owner, due date)  
+5. Sends a formatted summary message to **Slack**
+
+This provides a one-click daily/weekly report from your Notion dashboard into your team Slack workspace.
 
 ---
 
@@ -29,70 +31,71 @@ Ideal for sprint reviews, daily summaries, and project coordination.
 
 ```
 
-Natural Language → LLM → NotionQueryBuilder → Notion DB → LLM Summary → Slack Sender
+Natural Language → LLM → Notion Query Builder → Notion Database → Summarizer → Slack Sender
 
-````
+```
 
-- **LLM Component:** Parses natural language into a valid Notion filter JSON.  
-- **Notion Query Component:** Queries the database using the generated JSON.  
-- **Summarizer LLM:** Synthesizes the fetched task data.  
-- **Slack Sender:** Sends formatted Markdown reports to your team channel.
+- **LLM Component** — Converts natural instructions into Notion JSON query filters  
+- **Notion Component** — Fetches tasks using the generated query  
+- **Summarizer LLM** — Condenses and formats the results for readability  
+- **Slack Sender** — Sends the summary as a Markdown message to a chosen channel  
 
 ---
 
 ## ⚙️ Prerequisites
 
-### Required Accounts & API Tokens
+Before running, you’ll need three API connections:
 
-| Service | Description | Environment Variable |
-|----------|--------------|----------------------|
-| **OpenAI API** | Used for natural language → query generation and summarization. | `OPENAI_API_KEY` |
-| **Notion API** | Access your Notion database. | `NOTION_SECRET` |
-| **Slack API** | Send summary message to a Slack channel as your app or bot. | `SLACK_USER_TOKEN` |
+| Service | Purpose | Environment Variable | How to Get It |
+|----------|----------|----------------------|----------------|
+| **OpenAI API (or any LLM)** | Generates queries and summaries | `OPENAI_API_KEY` | [Create OpenAI key](https://platform.openai.com/api-keys). You can also replace this with **Anthropic**, **Perplexity**, or any other model by editing the LLM node in LangFlow. |
+| **Notion API** | Reads tasks from your database | `NOTION_SECRET` | Go to [Notion Integrations](https://www.notion.so/my-integrations), create an internal integration, and copy the **Internal Integration Token**. Then share your database with that integration. |
+| **Slack API** | Sends summary messages | `SLACK_USER_TOKEN` | Create a Slack app via [api.slack.com/apps](https://api.slack.com/apps). Under **OAuth & Permissions**, add these scopes:<br> - `chat:write` (post messages)<br> - `channels:read` (list channels)<br> Then install the app to your workspace and copy your **User OAuth Token** (starts with `xoxp-...`). |
 
-You can find or create these tokens here:
+> ⚠️ Make sure your Slack app (bot) is invited to the channel you want to post in using `/invite @your-app-name`.
 
-- [OpenAI API Keys](https://platform.openai.com/api-keys)  
-- [Notion Integrations](https://www.notion.so/my-integrations)  
-- [Slack Apps](https://api.slack.com/apps)
+---
+
+## 🗂️ About the Notion Database
+
+- This flow was designed around a **copy of the XC475 Sprint Dashboard Notion database**.
+- You’ll need your own **Notion Database ID**, which you can find from your Notion page’s URL.  
+  Example:  
+```
+
+[https://www.notion.so/yourworkspace/Task-Dashboard-28452a2c9ba781b395c8e78de0614215](https://www.notion.so/yourworkspace/Task-Dashboard-28452a2c9ba781b395c8e78de0614215)
+
+````
+→ The string after the last `/` (`28452a2c9ba781b395c8e78de0614215`) is your **Database ID**.
+
+- You can duplicate that dashboard and use it as a sandbox until your team or instructor grants full integration permissions.
+
+Set this as an environment variable:
+
+```bash
+NOTION_DATABASE_ID=28452a2c9ba781b395c8e78de0614215
+````
 
 ---
 
 ## 🧩 Environment Setup
 
-Create a `.env` file in your project root:
+Create a `.env` file in your root directory:
 
 ```bash
 OPENAI_API_KEY=sk-yourkeyhere
 NOTION_SECRET=secret_your_notion_key
-SLACK_USER_TOKEN=xoxp-your-token
 NOTION_DATABASE_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-````
+SLACK_USER_TOKEN=xoxp-your-slack-user-token
+```
+
+LangFlow automatically loads environment variables for components that use `os.getenv()`.
 
 ---
 
-## 🚀 Setup Options
+## 🐳 Option 1 — Docker (Recommended)
 
-### 🐳 Option 1 — Docker (Recommended)
-
-#### 1. Clone or download this template
-
-```bash
-git clone https://github.com/your-org/preaa-task-summarizer.git
-cd preaa-task-summarizer
-```
-
-#### 2. Create `.env`
-
-```bash
-cp .env.example .env
-```
-
-Edit it with your API keys.
-
-#### 3. Start LangFlow
-
-Using Docker directly:
+Run LangFlow in a container with mounted artifacts and components.
 
 ```bash
 docker run -it --rm \
@@ -103,33 +106,28 @@ docker run -it --rm \
   langflowai/langflow:latest
 ```
 
-Or using Docker Compose:
+Then visit: **[http://localhost:7860](http://localhost:7860)**
 
-```bash
-docker compose up
-```
-
-LangFlow will start at [http://localhost:7860](http://localhost:7860)
+Import the `langflow-template.json` from the `artifacts/` folder.
 
 ---
 
-### 💻 Option 2 — Local Python Environment
+## 💻 Option 2 — Local Python Environment
 
-#### 1. Install dependencies
+### 1. Install dependencies
 
 ```bash
 pip install langflow openai requests python-dotenv
 ```
 
-#### 2. Load environment variables automatically
-
-Create a small `start.py`:
+### 2. Run LangFlow with environment loading
 
 ```python
+# start.py
 from dotenv import load_dotenv
-load_dotenv()
 import subprocess
 
+load_dotenv()
 subprocess.run(["langflow", "run"])
 ```
 
@@ -141,43 +139,45 @@ python start.py
 
 ---
 
-## 🧠 Usage Guide
+## 🧠 Usage
 
-1. Open LangFlow (`http://localhost:7860`)
-2. Import the template JSON:
+1. Launch LangFlow (`http://localhost:7860`)
+2. Import your flow (`artifacts/langflow-template.json`)
+3. Verify:
 
-   * Click **Import Flow** → select `artifacts/langflow-template.json`
-3. Open the flow and verify:
+   * Notion Node → uses `NOTION_SECRET` and `NOTION_DATABASE_ID`
+   * Slack Node → uses `SLACK_USER_TOKEN`
+   * LLM Node → connected to OpenAI or chosen provider
+4. In the input node, type something like:
 
-   * `Notion` component uses your `NOTION_SECRET`
-   * `Slack Sender` uses your `SLACK_USER_TOKEN`
-   * `LLM` is configured to `gpt-4o` or `gpt-3.5-turbo`
-4. In the input node, type:
+   ```
+   Summarize all tasks assigned to Marcus that are still in progress.
+   ```
+5. The system will:
 
-   > “Summarize all tasks assigned to Marcus that are still in progress.”
-
-You’ll receive a formatted Slack message with task summaries, deadlines, and priorities.
+   * Generate a Notion filter JSON,
+   * Fetch matching entries,
+   * Summarize the results,
+   * Post a Markdown report to Slack.
 
 ---
 
-## 🧾 Configuration Files
+## 🧾 Configuration File Example
 
-### `config.yaml`
-
-Defines metadata and environment variables required for this template.
+**`config.yaml`**
 
 ```yaml
 template:
   name: "notion-slack-task-summarizer"
   version: "1.0.0"
-  description: "LangFlow workflow for querying and summarizing Notion tasks, then posting updates to Slack."
+  description: "LangFlow workflow that converts natural language into Notion database queries and posts task summaries to Slack."
+  author: "Marcus Izumi"
 
 environment:
   required:
     - OPENAI_API_KEY
     - NOTION_SECRET
     - SLACK_USER_TOKEN
-  optional:
     - NOTION_DATABASE_ID
 
 services:
@@ -187,44 +187,27 @@ services:
   slack:
     post_mode: "markdown"
     channel_type: "public"
+  llm:
+    provider: "openai"
+    model: "gpt-4o"
+    substitutable: true
 ```
 
 ---
 
-## 🧩 Troubleshooting
-
-| Issue                   | Cause                          | Solution                                                   |
-| ----------------------- | ------------------------------ | ---------------------------------------------------------- |
-| `Error: not_in_channel` | Bot not added to Slack channel | Invite bot using `/invite @your-bot`                       |
-| `Invalid JSON query`    | LLM misformatted Notion filter | Adjust system message for query generation                 |
-| `Unauthorized`          | Wrong or expired tokens        | Regenerate in OpenAI / Slack / Notion                      |
-| `Flow not loading`      | Wrong volume mount             | Ensure `artifacts/` and `custom_components/` exist locally |
-
----
-
-## ✅ Verification Checklist
-
-* [x] LangFlow launches successfully
-* [x] Environment variables loaded correctly
-* [x] LLM generates valid Notion queries
-* [x] Slack posts messages successfully
-* [x] All setup steps reproducible in ≤10 min
-
----
-
-## 💬 Example LLM System Message (Optional for Reviewers)
+## 🧩 Example System Message for Query Generator
 
 ```text
-You are a Notion Query Generator. 
-Given a task description, output a valid JSON body for the Notion API query endpoint.
+You are a Notion query generator. 
+Convert the user's natural-language task request into a valid Notion query JSON.
 
-Use the following schema:
-- "filter": may include properties like "Status", "Priority", "Due", "Assignee".
-- "sorts": sort by "Due" ascending when relevant.
-- Output must be pure JSON compatible with Notion’s /query endpoint.
+Include:
+- "filter" for fields such as Status, Priority, Due, or Assignee.
+- "sorts" for ordering (preferably by "Due" ascending).
+Return only valid JSON.
 ```
 
-Example:
+Example Output:
 
 ```json
 {
@@ -241,13 +224,82 @@ Example:
 
 ---
 
+## 🧩 Slack Authentication Explained
+
+Your Slack app requires the following **OAuth scopes** to post messages and access channels:
+
+| Scope           | Purpose                                  |
+| --------------- | ---------------------------------------- |
+| `chat:write`    | Send messages as the app or user         |
+| `channels:read` | Retrieve channel IDs for posting         |
+| `users:read`    | (optional) Lookup user info for mentions |
+
+After creating the app and adding scopes:
+
+1. Click **Install App to Workspace**
+2. Copy the **User OAuth Token (xoxp-...)**
+3. Store it in `.env` as `SLACK_USER_TOKEN`
+
+> 🧠 Tip: If you want messages to appear under your **personal account name**, use a user token (`xoxp-`).
+> If you want messages sent by the app bot, use a bot token (`xoxb-`) instead and adjust the Slack node code accordingly.
+
+---
+
+## 🧩 Testing the Slack Connection
+
+Before running the full flow, test your token manually:
+
+```bash
+curl -X POST https://slack.com/api/chat.postMessage \
+  -H "Authorization: Bearer $SLACK_USER_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"channel":"#general","text":"✅ Slack connection successful!"}'
+```
+
+If you see a message appear in Slack, your setup is good.
+
+---
+
+## 🧰 Troubleshooting
+
+| Issue              | Cause                                 | Solution                                             |
+| ------------------ | ------------------------------------- | ---------------------------------------------------- |
+| `not_in_channel`   | App/bot not added to Slack channel    | `/invite @your-bot`                                  |
+| `invalid_auth`     | Wrong token type                      | Ensure token starts with `xoxp-` or `xoxb-`          |
+| `invalid_json`     | LLM generated malformed query         | Adjust system prompt or use validation node          |
+| `403 unauthorized` | Notion DB not shared with integration | Re-share database with integration via “Connections” |
+| `Timeout`          | Slow Notion response                  | Increase timeout in Notion component (default 60 s)  |
+
+---
+
+## ✅ Verification Checklist
+
+* [x] LangFlow launches successfully
+* [x] LLM generates valid JSON filters
+* [x] Notion query returns results
+* [x] Slack message posts to target channel
+* [x] Environment loads correctly via `.env`
+* [x] Reproducible setup ≤ 10 minutes
+
+---
+
+## 🧑‍💻 About This Project
+
+This template was created by **Marcus Izumi** for the **XC475 Software Engineering course** at Boston University.
+It serves as a prototype for integrating **AI-driven task summarization** with **Notion sprint dashboards**.
+Currently awaiting approval to integrate directly with the **official class Notion workspace**.
+
+---
+
 **Author:** Marcus Izumi
-**PREAA Template Maintainer:** PREAA Templates Team
+**Instructor Reference:** XC475 / Fall 2025
 **License:** MIT
+**Repository:** PREAA Templates – `notion-slack-task-summarizer`
 
 ```
 
 ---
 
-Would you like me to automatically add a **short section for “Testing the Slack Output”** (a one-liner command with curl or Python `requests`) so reviewers can verify the token and channel before running the full LangFlow flow? It’s a great sanity check for graders.
+Would you like me to add a **short “Contribution / Pull Request Notes”** section for your submission (e.g., how reviewers can rebuild and test your component locally with your `custom_components/SlackUserSender.py`)?  
+That helps make your PR look professional and reproducible for PREAA reviewers.
 ```
