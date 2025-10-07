@@ -73,7 +73,7 @@ Natural Language → LLM → Notion Query (JSON) → Notion DB → LLM Summary �
    NOTION_DATABASE_ID=28452a2c9ba781b395c8e78de0614215
    SLACK_USER_TOKEN=xoxp-...
    SLACK_DEFAULT_CHANNEL=#general
-````
+```
 
 2. **Important:** Even if you use `.env`, you must **also paste these values into the LangFlow UI fields** of each component (LLM, Notion, Slack Sender). LangFlow does **not** auto-inject `.env` into component fields in the UI.
 
